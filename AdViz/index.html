@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de-de">
+<head>
+    <link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8">
+<style type="text/css">
+    html, body, #basicMap {
+        margin: 1em;
+    }
+    
+  </style>
+  <script src="https://openlayers.org/api/OpenLayers.js"></script>
+  <script>
+    function init() {
+      map = new OpenLayers.Map("basicMap");
+      var mapnik = new OpenLayers.Layer.OSM();
+      map.addLayer(mapnik);
+
+      var lonLat = new OpenLayers.LonLat( 13.41,52.52 )
+          .transform(
+            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
+            new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
+          );
+          var zoom=15;
+      
+      var markers = new OpenLayers.Layer.Markers( "Markers" );
+      map.addLayer(markers);
+
+      markers.addMarker(new OpenLayers.Marker(lonLat));
+      map.setCenter(lonLat, zoom);
+    }
+  </script>
+
+</head>
+    <body onload="init()">
+        
+        <div class="login">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" ><br/>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password"><br/>
+            <input type="button" class="buttons" id="login-button" name="login-button" value="LOGIN">
+        </div><br/>
+        <div class="add-contact">
+            <label for="first-name">first name</label>
+            <input type="text" id="first-name" name="first-name"><br/>
+            <label for="last-name">last name</label>
+            <input type="text" id="last-name" name="last-name"><br/>
+            <label for="street-number">street & number</label>
+            <input type="text" id="street-number" name="street-number"><br/>
+            <label for="zip">ZIP</label>
+            <input type="text" id="zip" name="zip"><br/>
+            <label for="city">city</label>
+            <input type="text" id="city" name="city"><br/>
+            <label for="state">state</label>
+            <input type="text" id="state" name="state"><br/>
+            <label for="country">country</label>
+            <input type="text" id="country" name="country"><br/>
+            <label for="public">public</label>
+            <input type="checkbox" class="checkbox" value="flase"><br/>
+            <label for="owner">owner</label>
+            <select id="owner" class="dropdown" name="owner">
+                <option>self</option>
+                <option>normalo</option>
+            </select><br/>
+            <input type="button" class="buttons" id="add-button" name="add-button" value="Add">
+        </div><br/>
+        <div class="update-delete">
+            <label for="first-name">first name</label>
+            <input type="text" id="first-name" name="first-name" value="Bob"><br/>
+            <label for="last-name">last name</label>
+            <input type="text" id="last-name" name="last-name" value="Brown"><br/>
+            <label for="street-number">street & number</label>
+            <input type="text" id="street-number" name="street-number" value="Berliner Straße 22"><br/>
+            <label for="zip">ZIP</label>
+            <input type="text" id="zip" name="zip" value="10715"><br/>
+            <label for="city">city</label>
+            <input type="text" id="city" name="city" value="Berlin"><br/>
+            <label for="state">state</label>
+            <input type="text" id="state" name="state" value="Berlin"><br/>
+            <label for="country">country</label>
+            <input type="text" id="country" name="country" value="Germany"><br/>
+            <label for="public">public</label>
+            <input type="checkbox" class="checkbox" value="flase"><br/>
+            <label for="owner">owner</label>
+            <select id="owner" class="dropdown" name="owner">
+                <option>self</option>
+                <option selected>normalo</option>
+            </select><br/>
+            <input type="button" class="buttons" id="update" name="update" value="Update">
+            <input type="button" class="buttons" id="delete" name="delete" value="Delete">
+        </div><br/>
+        <div class="map">
+            <input type="button" class="map-buttons" id="show-my" name="show-my" value="Show my contacts">
+            <input type="button" class="map-buttons" id="show-all" name="show-all" value="Show all contacts">
+            <input type="button" class="map-buttons" id="add-new" name="add-new" value="Add new contact">
+
+            <table>
+                 <tr><td>Anne</td></tr>
+                 <tr><td>Alexandra</td></tr>
+                 <tr><td>Bob</td></tr>
+                 <tr><td>Carl</td></tr>
+                 <tr><td>Emil</td></tr>
+                 <tr><td>Herta</td></tr>
+            </table>
+
+            
+            <div id="basicMap"  style="width:27em; height:20em; ">
+                
+            </div>
+        </div>
+        
+  
+    </body>
+</html>

@@ -1,0 +1,23 @@
+body {
+    /* background-color: #ff7571;
+     background-image: url("../images/butterfly.gif");
+     background-repeat: no-repeat; */
+}
+
+h2 {
+	font-family:verdana, monospace;
+}
+
+table, th, td {
+  border: 1px solid black;
+}
+
+/*
+.abs {
+    position: absolute;
+    padding: 4em;
+    background-color: rgba(0, 130, 209, .3);
+}
+.o-r { top: 0; right: 0 }
+.u-l { bottom: 0; left: 0 }
+*/
