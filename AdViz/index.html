@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="de" lang="de-de">
+
+<script src="js/javascript.js" async defer></script>
+
+
 <head>
     <link rel="stylesheet" href="css/style.css">
 <meta charset="utf-8">
@@ -10,48 +14,33 @@
     
   </style>
   <script src="https://openlayers.org/api/OpenLayers.js"></script>
-  <script>
-    function init() {
-      map = new OpenLayers.Map("basicMap");
-      var mapnik = new OpenLayers.Layer.OSM();
-      map.addLayer(mapnik);
 
-      var lonLat = new OpenLayers.LonLat( 13.41,52.52 )
-          .transform(
-            new OpenLayers.Projection("EPSG:4326"), // transform from WGS 1984
-            new OpenLayers.Projection("EPSG:900913") // to Spherical Mercator Projection
-          );
-          var zoom=15;
-      
-      var markers = new OpenLayers.Layer.Markers( "Markers" );
-      map.addLayer(markers);
-
-      markers.addMarker(new OpenLayers.Marker(lonLat));
-      map.setCenter(lonLat, zoom);
-    }
-  </script>
 
 </head>
     <body onload="init()">
         
-        <div class="login">
+        <div class="login" id="login">
+        <form action="javascript:void(0);">
             <label for="username">Username</label>
-            <input type="text" id="username" name="username" ><br/>
+            <input type="text" id="username" name="username" required><br/>
             <label for="password">Password</label>
-            <input type="password" id="password" name="password"><br/>
-            <input type="button" class="buttons" id="login-button" name="login-button" value="LOGIN">
+            <input type="password" id="password" name="password" required><br/>
+            <input type="submit" onclick="login()" class="buttons" id="login-button" name="login-button" value="LOGIN">
+
+        </form>
         </div><br/>
-        <div class="add-contact">
+        <div class="add-contact" id="add-contact">
+            <form action="/action_page.php">
             <label for="first-name">first name</label>
-            <input type="text" id="first-name" name="first-name"><br/>
+            <input type="text" id="first-name" name="first-name" required><br/>
             <label for="last-name">last name</label>
-            <input type="text" id="last-name" name="last-name"><br/>
+            <input type="text" id="last-name" name="last-name" required><br/>
             <label for="street-number">street & number</label>
-            <input type="text" id="street-number" name="street-number"><br/>
+            <input type="text" id="street-number" name="street-number" required><br/>
             <label for="zip">ZIP</label>
-            <input type="text" id="zip" name="zip"><br/>
+            <input type="text" id="zip" name="zip" required><br/>
             <label for="city">city</label>
-            <input type="text" id="city" name="city"><br/>
+            <input type="text" id="city" name="city" required><br/>
             <label for="state">state</label>
             <input type="text" id="state" name="state"><br/>
             <label for="country">country</label>
@@ -63,19 +52,24 @@
                 <option>self</option>
                 <option>normalo</option>
             </select><br/>
-            <input type="button" class="buttons" id="add-button" name="add-button" value="Add">
+            <input type="submit" class="buttons" id="add-button" name="add-button" value="Add">
+
+
+
+        </form>
         </div><br/>
-        <div class="update-delete">
+        <div class="update-delete" id="update-delete">
+        <form action="/action_page.php">
             <label for="first-name">first name</label>
-            <input type="text" id="first-name" name="first-name" value="Bob"><br/>
+            <input type="text" id="first-name" name="first-name" value="Bob" required><br/>
             <label for="last-name">last name</label>
-            <input type="text" id="last-name" name="last-name" value="Brown"><br/>
+            <input type="text" id="last-name" name="last-name" value="Brown" required><br/>
             <label for="street-number">street & number</label>
-            <input type="text" id="street-number" name="street-number" value="Berliner Straße 22"><br/>
+            <input type="text" id="street-number" name="street-number" value="Berliner Straße 22" required><br/>
             <label for="zip">ZIP</label>
-            <input type="text" id="zip" name="zip" value="10715"><br/>
+            <input type="text" id="zip" name="zip" value="10715" required><br/>
             <label for="city">city</label>
-            <input type="text" id="city" name="city" value="Berlin"><br/>
+            <input type="text" id="city" name="city" value="Berlin" required><br/>
             <label for="state">state</label>
             <input type="text" id="state" name="state" value="Berlin"><br/>
             <label for="country">country</label>
@@ -87,10 +81,17 @@
                 <option>self</option>
                 <option selected>normalo</option>
             </select><br/>
-            <input type="button" class="buttons" id="update" name="update" value="Update">
-            <input type="button" class="buttons" id="delete" name="delete" value="Delete">
+            <input type="submit" class="buttons" id="update" name="update" value="Update">
+            <input type="submit" class="buttons" id="delete" name="delete" value="Delete">
+        </form>
         </div><br/>
-        <div class="map">
+
+        
+
+
+        <div class="map" id="map">
+            <header id="begruessung">  </header>
+
             <input type="button" class="map-buttons" id="show-my" name="show-my" value="Show my contacts">
             <input type="button" class="map-buttons" id="show-all" name="show-all" value="Show all contacts">
             <input type="button" class="map-buttons" id="add-new" name="add-new" value="Add new contact">
