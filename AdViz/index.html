@@ -30,7 +30,7 @@
         </form>
         </div><br/>
         <div class="add-contact" id="add-contact">
-            <form action="/action_page.php">
+            <form action="javascript:void(0);">
             <label for="first-name">first name</label>
             <input type="text" id="first-name" name="first-name" required><br/>
             <label for="last-name">last name</label>
@@ -46,43 +46,41 @@
             <label for="country">country</label>
             <input type="text" id="country" name="country"><br/>
             <label for="public">public</label>
-            <input type="checkbox" class="checkbox" value="flase"><br/>
-            <label for="owner">owner</label>
+            <input type="checkbox" id = "public" class="checkbox" value="flase"><br/>
+            <label for="owner" id="ownerLabel">owner</label>
             <select id="owner" class="dropdown" name="owner">
                 <option>self</option>
                 <option>normalo</option>
             </select><br/>
-            <input type="submit" class="buttons" id="add-button" name="add-button" value="Add">
-
-
-
+            <input type="submit" onclick="addContact()" class="buttons" id="add-button" name="add-button" value="Add">
         </form>
+        
         </div><br/>
         <div class="update-delete" id="update-delete">
-        <form action="/action_page.php">
+        <form action="javascript:void(0);">
             <label for="first-name">first name</label>
-            <input type="text" id="first-name" name="first-name" value="Bob" required><br/>
+            <input type="text" id="first-nameU" name="first-name" value="Bob" required><br/>
             <label for="last-name">last name</label>
-            <input type="text" id="last-name" name="last-name" value="Brown" required><br/>
+            <input type="text" id="last-nameU" name="last-name" value="Brown" required><br/>
             <label for="street-number">street & number</label>
-            <input type="text" id="street-number" name="street-number" value="Berliner Straße 22" required><br/>
+            <input type="text" id="street-numberU" name="street-number" value="Berliner Straße 22" required><br/>
             <label for="zip">ZIP</label>
-            <input type="text" id="zip" name="zip" value="10715" required><br/>
+            <input type="text" id="zipU" name="zip" value="10715" required><br/>
             <label for="city">city</label>
-            <input type="text" id="city" name="city" value="Berlin" required><br/>
+            <input type="text" id="cityU" name="city" value="Berlin" required><br/>
             <label for="state">state</label>
-            <input type="text" id="state" name="state" value="Berlin"><br/>
+            <input type="text" id="stateU" name="state" value="Berlin"><br/>
             <label for="country">country</label>
-            <input type="text" id="country" name="country" value="Germany"><br/>
+            <input type="text" id="countryU" name="country" value="Germany"><br/>
             <label for="public">public</label>
-            <input type="checkbox" class="checkbox" value="flase"><br/>
-            <label for="owner">owner</label>
-            <select id="owner" class="dropdown" name="owner">
+            <input type="checkbox" id= "publicU" class="checkbox" value="flase"><br/>
+            <label for="owner" id= "ownerLabelU">owner</label>
+            <select id="ownerU" class="dropdown" name="owner">
                 <option>self</option>
-                <option selected>normalo</option>
+                <option selected>Normalo</option>
             </select><br/>
-            <input type="submit" class="buttons" id="update" name="update" value="Update">
-            <input type="submit" class="buttons" id="delete" name="delete" value="Delete">
+            <input type="submit" onclick="updateContact()" class="buttons" id="update" name="update" value="Update">
+            <input type="submit" onclick="deleteContact()" class="buttons" id="delete" name="delete" value="Delete">
         </form>
         </div><br/>
 
@@ -92,12 +90,12 @@
         <div class="map" id="map">
             <header id="begruessung">  </header>
 
-            <input type="button" class="map-buttons" id="show-my" name="show-my" value="Show my contacts">
-            <input type="button" class="map-buttons" id="show-all" name="show-all" value="Show all contacts">
-            <input type="button" class="map-buttons" id="add-new" name="add-new" value="Add new contact">
+            <input type="button" onclick="myContacts()" class="map-buttons" id="show-my" name="show-my" value="Show my contacts">
+            <input type="button" onclick ="allContacts()" class="map-buttons" id="show-all" name="show-all" value="Show all contacts">
+            <input type="button" onclick="addContactScreen()" class="map-buttons" id="add-new" name="add-new" value="Add new contact">
 
-            <table>
-                 <tr><td>Anne</td></tr>
+            <table id = "table">
+                 <tr><td></td></tr>
                  <tr><td>Alexandra</td></tr>
                  <tr><td>Bob</td></tr>
                  <tr><td>Carl</td></tr>
