@@ -5,6 +5,8 @@ function init() {
     document.getElementById("add-contact").style.display = "none";
     document.getElementById("update-delete").style.display = "none";
     document.getElementById("map").style.display = "none";
+    document.getElementById("logout").style.display = "none";
+
 
 
     map = new OpenLayers.Map("basicMap");
@@ -40,8 +42,7 @@ function contact(firstname, lastname, street, zip, city, state, country, ispriva
 var contacts = [new contact("Anne", "Schmidt", "Friedrichsstraße 10", "10969", "Berlin", "", "", true, "Normalo"),
 new contact("Max", "Mustermann", "Berliner Straße 25", "13507", "Berlin", "", "", false, "Normalo"),
 new contact("Lukas", "Müller", "Berliner Straße 60", "13467", "Berlin", "", "", true, "Admina"),
-new contact("Lisa", "Baum", "Jägerstraße 54", "10117", "Berlin", "", "", false, "Admina")
-]
+new contact("Lisa", "Baum", "Jägerstraße 54", "10117", "Berlin", "", "", false, "Admina")];
 
 var user = [{ // Object
     name: "Normalo", // Property
@@ -78,23 +79,28 @@ function addContact() {
         owner = currentUser.name;
     }
 
-
     contacts[contacts.length] = new contact(document.getElementById("first-name").value, document.getElementById("last-name").value,
         document.getElementById("street-number").value, document.getElementById("zip").value, document.getElementById("city").value,
         document.getElementById("state").value, document.getElementById("country").value, document.getElementById("public").value,
         owner);
 
     waypoints(contacts[contacts.length - 1]);
-    if (testMap == -1) {
-        contacts.pop();
-        alert("Die Adresse konnte nicht aufgelöst werden!");
-        testMap = 0;
-    }
-    else {
-        myContacts();
-        document.getElementById("add-contact").style.display = "none";
-        document.getElementById("map").style.display = "block";
-    }
+    var millisecondsToWait = 500;
+    setTimeout(function () {
+        if (!bool) {
+            contacts.pop();
+            alert("Die Adresse konnte nicht aufgelöst werden!");
+            testMap = 0;
+            document.getElementById("add-contact").style.display = "none";
+            document.getElementById("map").style.display = "block";
+        }
+        else {
+            myContacts();
+            document.getElementById("add-contact").style.display = "none";
+            document.getElementById("map").style.display = "block";
+        }
+    }, millisecondsToWait);
+
 }
 
 
@@ -125,7 +131,6 @@ function myContacts() {
     document.getElementById("table").innerHTML = text;
     click();
 }
-
 
 function click() {
     var table = document.getElementById("table");
@@ -178,23 +183,37 @@ function deleteUpdateScreen(firstname) {
     }
 }
 
+var temp;
 
 function updateContact() {
-    contacts[selectedContact].firstname = document.getElementById("first-nameU").value;
-    contacts[selectedContact].lastname = document.getElementById("last-nameU").value;
-    contacts[selectedContact].street = document.getElementById("street-numberU").value;
-    contacts[selectedContact].zip = document.getElementById("zipU").value;
-    contacts[selectedContact].city = document.getElementById("cityU").value;
-    contacts[selectedContact].state = document.getElementById("stateU").value;
-    contacts[selectedContact].country = document.getElementById("countryU").value;
-    contacts[selectedContact].isPrivate = document.getElementById("publicU").value;
-    owner = document.getElementById("ownerU").value;
 
-    document.getElementById("add-contact").style.display = "none";
-    document.getElementById("update-delete").style.display = "none";
-    document.getElementById("map").style.display = "block";
+    var owner = document.getElementById("owner").value;
+    if (owner == "self" || !currentUser.isAdmin) {
+        owner = currentUser.name;
+    }
 
-    myContacts();
+
+    temp = new contact(document.getElementById("first-nameU").value, document.getElementById("last-nameU").value,
+        document.getElementById("street-numberU").value, document.getElementById("zipU").value, document.getElementById("cityU").value,
+        document.getElementById("stateU").value, document.getElementById("countryU").value, document.getElementById("publicU").value,
+        owner);
+
+
+    waypoints(temp);
+    var millisecondsToWait = 500;
+    setTimeout(function () {
+        if (!bool) {
+            alert("Die Adresse konnte nicht aufgelöst werden!");
+            document.getElementById("update-delete").style.display = "none";
+            document.getElementById("map").style.display = "block";
+        }
+        else {
+            contacts[selectedContact] = temp;
+            myContacts();
+            document.getElementById("update-delete").style.display = "none";
+            document.getElementById("map").style.display = "block";
+        }
+    }, millisecondsToWait);
 }
 
 function deleteContact() {
@@ -221,14 +240,24 @@ function login() {
             document.getElementById("login").style.display = "none";
             document.getElementById("begruessung").innerHTML = "Hallo, " + currentUser.name;
             document.getElementById("map").style.display = "block";
-
+            document.getElementById("logout").style.display = "block";
             myContacts();
         }
     }
 
 }
 
+function logout() {
+    document.getElementById("login").style.display = "block";
+    document.getElementById("add-contact").style.display = "none";
+    document.getElementById("update-delete").style.display = "none";
+    document.getElementById("map").style.display = "none";
+    document.getElementById("logout").style.display = "none";
 
+}
+
+
+var bool;
 
 function waypoints(contact) {
     var xhr = new XMLHttpRequest();
@@ -245,7 +274,6 @@ function waypoints(contact) {
 
         if (this.status == 200) {
             if (obj.length != 0) {
-                alert("mmm");
                 var lat = obj[0].lat;
                 var lng = obj[0].lon;
                 var lonLat = new OpenLayers.LonLat(lng, lat)
@@ -254,15 +282,16 @@ function waypoints(contact) {
                         map.getProjectionObject());
 
                 markers.addMarker(new OpenLayers.Marker(lonLat));
+                bool = true;
             }
             else {
-                alert("test");
-                testMap = -1;
+                bool = false;
             }
         } else { //Handhabung von nicht-200er
             alert("HTTP-status code was: " + obj.status);
         }
     };
+
     xhr.send();
 }
 
