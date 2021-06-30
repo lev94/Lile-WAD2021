@@ -232,23 +232,52 @@ function deleteContact() {
 
 var currentUser;
 
+//login user -> request(username, password) an server returned falls currentUser
+function checkLogin(user){
+    //window.alert("2dfnoäöa");
+    var username = user.username;
+    var password = user.password;
+    for (var i = 0; i < 2; i++) {//Server
+        if (username == user[i].name && password == user[i].password) {
+            return user[i];
+        }
+    }
+    return undefined;
+    
+}
+
 function login() {
     var username = document.getElementById("username").value;
     var password = document.getElementById("password").value;
 
-    for (var i = 0; i < 2; i++) {
-        if (username == user[i].name && password == user[i].password) {
-            currentUser = user[i];
+
+    var xhr = new XMLHttpRequest();
+    var url = "http://localhost:3000/users";
+    xhr.open("POST", url, true);
+    xhr.onerror = function () {// diese Funktion wird ausgefuehrt, wenn ein Fehler auftritt
+        alert("Connecting to server with " + url + " failed!\n");
+    };
+    xhr.onload = function (e) {// diese Funktion wird ausgefuehrt, wenn die Anfrage erfolgreich war
+        var data = this.response;
+        var obj = JSON.parse(data);
+        alert(data);
+        if (this.status == 200) {
+            currentUser = obj;
             document.getElementById("login").style.display = "none";
             document.getElementById("begruessung").innerHTML = "Hallo, " + currentUser.name;
             document.getElementById("map").style.display = "block";
             document.getElementById("logout").style.display = "block";
             myContacts();
-            return;
+        } else { //Handhabung von nicht-200er
+            alert("Falscher Login");
+            alert("HTTP-status code was: " + obj.status);
         }
-    }
-    alert("Falscher Login");
-
+    };
+    
+    var s = JSON.stringify({"username":username, "password":password});
+    s = "username"
+    alert(s);
+    xhr.send(s);
 }
 
 function logout() {
@@ -299,3 +328,5 @@ function waypoints(contact) {
     xhr.send();
 }
 
+module.exports = login;
+module.exports = {checkLogin: checkLogin};
