@@ -16,6 +16,8 @@ function contact(firstname, lastname, street, zip, city, state, country, ispriva
 }
 
 function setCoordinates(contact, coordinates) {
+    contact.lat = coordinates[0];
+    contact.lng = coordinates[1];
     contact.coordinates = coordinates;
 }
 
@@ -116,10 +118,11 @@ function addContact() {
 
     var owner = document.getElementById("owner").value;
     if (owner == "self" || !currentUser.isAdmin) {
-        owner = currentUser.name;
+        owner = currentUser.userId;
     }
+    //alert(!document.getElementById("public").checked);
     var temp = new contact(document.getElementById("first-name").value, document.getElementById("last-name").value, document.getElementById("street-number").value,
-        document.getElementById("zip").value, document.getElementById("city").value, document.getElementById("state").value, document.getElementById("country").value, document.getElementById("public").checked);
+        document.getElementById("zip").value, document.getElementById("city").value, document.getElementById("state").value, document.getElementById("country").value, !document.getElementById("public").checked, owner);
 
 
     //waypoints(temp);
@@ -164,8 +167,8 @@ function addContact() {
             };
 
 
-
-            xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&public=" + temp.public + "&country=" + temp.country + "&owner=" + temp.owner + "&coordinates=" + temp.coordinates);
+            alert(temp.isPrivate);
+            xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&isPrivate=" + temp.isPrivate + "&country=" + temp.country + "&owner=" + temp.owner + "&lat=" + temp.lat + "&lng=" + temp.lng);
 
         }
     }, millisecondsToWait);
@@ -197,10 +200,10 @@ function login() {
         if (this.status == 200) {
             var data = this.response;
             var obj = JSON.parse(data);
-
+            //alert(obj.password + obj.isAdmin + obj.userId);
             currentUser = obj;
             document.getElementById("login").style.display = "none";
-            document.getElementById("begruessung").innerHTML = "Hallo, " + currentUser.name;
+            document.getElementById("begruessung").innerHTML = "Hallo, " + currentUser.firstName + " " + currentUser.lastName;
             document.getElementById("map").style.display = "block";
             document.getElementById("logout").style.display = "block";
             getContacts();
@@ -229,9 +232,9 @@ function allContacts() {
     markers.clearMarkers();
 
     for (var j = 0; j < contacts.length; j++) {
-        if (currentUser.isAdmin || !contacts[j].isPrivate || contacts[j].owner == currentUser.name) {
-            text += "<tr><td>" + contacts[j].firstname + "</td></tr>";
-            addContactMarker(contacts[j].coordinates[0], contacts[j].coordinates[1]);
+        if (currentUser.isAdmin || !contacts[j].isPrivate || contacts[j].owner == currentUser.userId) {
+            text += "<tr><td id=\"" + contacts[j]._id + "\">" + contacts[j].firstname + "</td></tr>";
+            addContactMarker(contacts[j].lat, contacts[j].lng);
             //waypoints(contacts[j]);
         }
     }
@@ -285,7 +288,7 @@ var selectedContact;
 
 function deleteUpdateScreen(firstname) {
     for (var i = 0; i < contacts.length; i++) {
-        if (contacts[i].firstname == firstname.innerHTML && (currentUser.isAdmin || contacts[i].owner == currentUser.name)) {
+        if (contacts[i]._id == firstname.id && (currentUser.isAdmin || contacts[i].owner == currentUser.userId)) {
             document.getElementById("update-delete").style.display = "block";
             document.getElementById("map").style.display = "none";
 
@@ -300,8 +303,7 @@ function deleteUpdateScreen(firstname) {
 
             }
 
-            selectedContact = contacts[i].id;
-            //selectedContact = i;
+            selectedContact = contacts[i]._id;
             var owner = contacts[i].owner;
 
             if (contacts[i].owner == "Admina") {
@@ -315,7 +317,7 @@ function deleteUpdateScreen(firstname) {
             document.getElementById("cityU").value = contacts[i].city;
             document.getElementById("stateU").value = contacts[i].state;
             document.getElementById("countryU").value = contacts[i].country;
-            document.getElementById("publicU").value = contacts[i].isPrivate;
+            document.getElementById("publicU").checked = (contacts[i].isPrivate != "true");
             document.getElementById("ownerU").value = owner;
         }
     }
@@ -329,7 +331,7 @@ function getContacts() {
     //document.getElementById("add-contact").style.display = "none";
     //document.getElementById("map").style.display = "block";
     var xhr = new XMLHttpRequest();
-    var url = "http://localhost:3000/contacts?id=" + currentUser.name;
+    var url = "http://localhost:3000/contacts?id=" + currentUser.userId;
 
     xhr.open("GET", url, true);
     xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -376,14 +378,14 @@ var currentUser;
 
 function updateContact() {
 
-    var owner = document.getElementById("owner").value;
+    var owner = document.getElementById("ownerU").value;
     if (owner == "self" || !currentUser.isAdmin) {
-        owner = currentUser.name;
+        owner = currentUser.userId;
     }
 
     temp = new contact(document.getElementById("first-nameU").value, document.getElementById("last-nameU").value,
         document.getElementById("street-numberU").value, document.getElementById("zipU").value, document.getElementById("cityU").value,
-        document.getElementById("stateU").value, document.getElementById("countryU").value, document.getElementById("publicU").value,
+        document.getElementById("stateU").value, document.getElementById("countryU").value, !document.getElementById("publicU").checked,
         owner);
 
 
@@ -431,8 +433,8 @@ function updateContact() {
                     //alert("Falscher Login");
                 }
             };
-            alert(temp.coordinates);
-            xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&public=" + temp.public + "&country=" + temp.country + "&owner=" + temp.owner + "&coordinates=" + temp.coordinates);
+            alert(temp.isPrivate);
+            xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&isPrivate=" + temp.isPrivate + "&country=" + temp.country + "&owner=" + temp.owner + "&lat=" + temp.lat + "&lng=" + temp.lng);
 
         }
     }, millisecondsToWait);
@@ -443,10 +445,10 @@ function myContacts() {
     var text = "";
     markers.clearMarkers();
     for (var j = 0; j < contacts.length; j++) {
-        if (contacts[j].owner == currentUser.name) {
-            text += "<tr><td>" + contacts[j].firstname + "</td></tr>";
+        if (contacts[j].owner == currentUser.userId) {
+            text += "<tr><td id=\"" + contacts[j]._id + "\">" + contacts[j].firstname + "</td></tr>";
 
-            addContactMarker(contacts[j].coordinates[0], contacts[j].coordinates[1]);
+            addContactMarker(contacts[j].lat, contacts[j].lng);
         }
     }
     document.getElementById("table").innerHTML = text;

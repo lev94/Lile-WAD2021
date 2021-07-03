@@ -12,7 +12,8 @@ function contact(firstname, lastname, street, zip, city, state, country, ispriva
     this.country = country;
     this.isPrivate = isprivate;
     this.owner = owner;
-    this.coordinates = coordinates;
+    this.lat = coordinates[0];
+    this.lng = coordinates[1];
 }
 
 
@@ -37,7 +38,7 @@ var user = [{ // Object
 function checkLogin(checkuser){
     //window.alert("2dfnoäöa");
     //var temp = JSON.parse(user);
-    var username = checkuser.username;
+    var username = checkuser.username;//getusers
     var password = checkuser.password;
     for (var i = 0; i < 2; i++) {//Server
         if (username == user[i].name && password == user[i].password) {
@@ -57,7 +58,7 @@ function addContact(contact){
 function getContacs(id){
     var temp = [];
     for(var i = 0; i < contacts.length; i++){
-        if(id==contacts[i].owner||!contacts[i].isPrivate){
+        if(id=="Admina"||id==contacts[i].owner||!contacts[i].isPrivate){
             temp[temp.length] = contacts[i];
         }
     }
@@ -68,6 +69,7 @@ function updateContact(id, contact){
     for(var i = 0; i < contacts.length; i++){
         if(id==contacts[i].id){
             contacts[i] = contact;
+            contacts[i].id = id;
             return;
         }
     }

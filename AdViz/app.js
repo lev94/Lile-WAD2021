@@ -8,8 +8,16 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var contactsRouter = require('./routes/contacts');
+//const db;
+//const users;
+//const contacts;
 
 var app = express();
+//var mongoose = require('mongoose');
+
+//mongoose.connect(url, {useNewUrlParser: true });
+
+
 
 // view engine setup - DAS BRAUCHEN WIR NICHT
 //app.set('views', path.join(__dirname, 'views'));
@@ -26,12 +34,12 @@ app.use('/users', usersRouter);
 app.use('/contacts', contactsRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
- // next(createError(404));
+app.use(function (req, res, next) {
+  // next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
