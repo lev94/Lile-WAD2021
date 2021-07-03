@@ -167,7 +167,6 @@ function addContact() {
             };
 
 
-            alert(temp.isPrivate);
             xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&isPrivate=" + temp.isPrivate + "&country=" + temp.country + "&owner=" + temp.owner + "&lat=" + temp.lat + "&lng=" + temp.lng);
 
         }
@@ -256,7 +255,6 @@ function deleteContact() {
     xhr.onload = function (e) {// diese Funktion wird ausgefuehrt, wenn die Anfrage erfolgreich war
         //alert("s");
         if (this.status == 204) {
-            alert("de");
             getContacts();
             //var data = this.response;
             //alert(data);
@@ -419,7 +417,6 @@ function updateContact() {
             xhr.onload = function (e) {// diese Funktion wird ausgefuehrt, wenn die Anfrage erfolgreich war
                 //alert("s");
                 if (this.status == 204) {
-                    alert("up");
                     getContacts();
                     var data = this.response;
                     //alert(data);
@@ -433,7 +430,6 @@ function updateContact() {
                     //alert("Falscher Login");
                 }
             };
-            alert(temp.isPrivate);
             xhr.send("lastname=" + temp.lastname + "&firstname=" + temp.firstname + "&street=" + temp.street + "&zip=" + temp.zip + "&state=" + temp.state + "&city=" + temp.city + "&isPrivate=" + temp.isPrivate + "&country=" + temp.country + "&owner=" + temp.owner + "&lat=" + temp.lat + "&lng=" + temp.lng);
 
         }
